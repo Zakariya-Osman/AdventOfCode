@@ -67,18 +67,18 @@ public class CustomBitwizeFunctions {
         return Integer.parseInt(end,2);
     }
     
-    public static int theDoer(String op, int value1, int value2){
+    public static int theDoer(String op, int...values){
         switch(op){
             case "AND":
-                return thisIsAnd(value1,value2);
+                return thisIsAnd(values[0],values[1]);
             case "OR":
-                return thisIsOr(value1,value2);
+                return thisIsOr(values[0],values[1]);
             case "NOT":
-                return thisIsNot(value1);
+                return thisIsNot(values[0]);
             case "LSHIFT":
-                return thisIsLShift(value1,value2);
+                return thisIsLShift(values[0],values[1]);
             case "RSHIFT":
-                return thisIsRShift(value1,value2);
+                return thisIsRShift(values[0],values[1]);
             default:
                 return 99999;
         }

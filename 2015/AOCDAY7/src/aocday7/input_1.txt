@@ -1,0 +1,3 @@
+bn RSHIFT 2 -> bo
+NOT bb -> bc
+0 -> c
