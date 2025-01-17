@@ -33,14 +33,14 @@ public class AOCDAY7 {
         HashMap<String, Integer> answerSheet = new HashMap<>();
 
         try {
-            BufferedReader r = new BufferedReader(new FileReader("input_1_1.txt"));
+            BufferedReader r = new BufferedReader(new FileReader("input.txt"));
             String line = r.readLine();
 
             while (line != null) {
                 String[] split = line.split("->");
 
-                workSheet.put(split[1], split[0]);
-                answerSheet.put(split[1], null);
+                workSheet.put(split[1].trim(), split[0].trim());
+                answerSheet.put(split[1].trim(), null);
                 
                 line = r.readLine();
             }
@@ -50,47 +50,74 @@ public class AOCDAY7 {
         } catch (IOException ex) {
             Logger.getLogger(AOCDAY7.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        
-        for(String key: workSheet.keySet()){
-            String[] parts = workSheet.get(key).split(" ");
-            
-            //if its just a number add it to answerSheet
-            if(isNumber(parts[0]) && parts.length == 1){
-                int value = Integer.parseInt(parts[0]);
-                answerSheet.put(key, value);
-            }
-            //if there is a number and an operation
-            else if (parts.length == 2){
-                String operation = parts[0];
-                String value = parts[1];
-                //case 1: if its a number and opertion that I can emediatly compute then add to the answersheet
-                if(isNumber(value)){
-                    int intValue = Integer.parseInt(value);
-                    answerSheet.put(key, theDoer(operation,intValue));
-                }
-                //case 2: if its a letter that I need to check if I have the value to in the answersheet
-                if(answerSheet.get(value) != null){
-                    theDoer(operation,answerSheet.get(value));
-                }
-                //once i find it, then I can do the computaitons then add it to the answersheet. if I cant then move on.
-            }
-            //if i get 2 values and an operator
-            else if (parts.length == 3){
-                String operation = parts[0];
-                int value1 = Integer.parseInt(parts[1]);
-                int value2 = Integer.parseInt(parts[2]);
-                
-                //case1: if i get 2 values that are numbers then compute then add to answerSheet
-                //case2: if its a letter that I need to check if I have the value to in the answersheet x2
-                //once i find both, then I can do the computaitons then add it to the answersheet. if cant then move on.
-
-            }   
-                        
+        answerSheet.put("b", 46065);
+        for (String key: workSheet.keySet()) {
+            computeValue(key,workSheet,answerSheet);
         }
-
+        
+        System.out.println("Computed Wires: " + answerSheet);
+        System.out.println(answerSheet.get("a"));
     }
 
+    private static void computeValue(String key, HashMap<String, String> workSheet, HashMap<String, Integer> answerSheet) {
+        if (answerSheet.get(key)!=null){
+            return;
+        }
+        
+        String[] parts = workSheet.get(key).split(" ");
+        int result = 0;
+        
+        //if its stright up
+        if (parts.length == 1){
+            if (isNumber(parts[0])){
+                result = Integer.parseInt(parts[0]);
+            }
+            else{
+                if(answerSheet.get(parts[0])==null){
+                    computeValue(parts[0],workSheet,answerSheet);
+                }
+                result = answerSheet.get(parts[0]);
+            }
+        }
+        
+        //if it has an operation and a singular value
+        else if (parts.length == 2){
+            if(answerSheet.get(parts[1])== null){
+                computeValue(parts[1],workSheet,answerSheet);
+            }
+            result = theDoer(parts[0],answerSheet.get(parts[1]));
+        }
+        
+        //if there are two values and an operator
+        else if (parts.length == 3){
+            int left,right =0;
+            if(isNumber(parts[0])){
+                left = Integer.parseInt(parts[0]);
+            }
+            else{
+                if(answerSheet.get(parts[0])==null){
+                    computeValue(parts[0],workSheet,answerSheet);
+                }
+                left = answerSheet.get(parts[0]);
+                
+            }
+            
+            
+            if(isNumber(parts[2])){
+                right = Integer.parseInt(parts[2]);
+            }
+            else{
+                if(answerSheet.get(parts[2])==null){
+                    computeValue(parts[2],workSheet,answerSheet);
+                }
+                right = answerSheet.get(parts[2]);
+            }
+            result = theDoer(parts[1],left,right);
+            
+        }
+        answerSheet.put(key, result);
+    }
+    
     private static boolean isNumber(String str) {
         if (str == null || str.isEmpty()) {
         return false; // Null or empty strings are not numbers
@@ -102,10 +129,5 @@ public class AOCDAY7 {
             return false; // If parsing fails, it's not a number
         }
     }
-
-    
-        
-    
-
 
 }

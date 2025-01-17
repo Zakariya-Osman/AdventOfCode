@@ -13,6 +13,30 @@ public class CustomBitwizeFunctions {
     public static int thisIsNot(int num){
         
         String ans = Integer.toBinaryString(~num);
+        
+        if (ans.length() < 16){
+            ans = "0".repeat(16-ans.length())+ ans;
+        }
+        else if(ans.length() > 16){
+            ans = ans.substring(ans.length()-16);
+        }
+        return Integer.parseInt(ans,2);
+        
+    }
+    
+    public static int thisIsNotORIGIONAL(int num){
+        
+        String ans = Integer.toBinaryString(~num);
+        if(ans.length() > 15){
+            ans = ans.substring(16, ans.length());
+        }
+        return Integer.parseInt(ans,2);
+        
+    }
+    
+    public static int thisIsAndORIGIONAL(int num1, int num2){
+        
+        String ans = Integer.toBinaryString(num1&num2);
         if(ans.length() > 15){
             ans = ans.substring(16, ans.length());
         }
@@ -23,6 +47,19 @@ public class CustomBitwizeFunctions {
     public static int thisIsAnd(int num1, int num2){
         
         String ans = Integer.toBinaryString(num1&num2);
+        if(ans.length() < 16){
+            ans = "0".repeat(16-ans.length())+ans;
+        }
+        else if (ans.length()>16){
+            ans = ans.substring(ans.length()-16);
+        }
+        return Integer.parseInt(ans,2);
+        
+    }
+    
+    public static int thisIsOrORIGIONAL(int num1, int num2){
+        
+        String ans = Integer.toBinaryString(num1|num2);
         if(ans.length() > 15){
             ans = ans.substring(16, ans.length());
         }
@@ -33,12 +70,15 @@ public class CustomBitwizeFunctions {
     public static int thisIsOr(int num1, int num2){
         
         String ans = Integer.toBinaryString(num1|num2);
-        if(ans.length() > 15){
-            ans = ans.substring(16, ans.length());
+        if(ans.length() < 16){
+            ans = "0".repeat(16-ans.length())+ans;
+        }
+        else if (ans.length()>16){
+            ans = ans.substring(ans.length()-16);
         }
         return Integer.parseInt(ans,2);
-        
     }
+        
     public static int thisIsLShift(int num, int shift){
         
         String zero = "0000000000000000";
