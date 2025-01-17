@@ -1,0 +1,4 @@
+123 -> a  
+a RSHIFT 2 -> b  
+b AND c -> d  
+d OR e -> f  
